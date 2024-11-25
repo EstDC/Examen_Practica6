@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicio6</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module">
+    if (!("anchorName" in document.documentElement.style)) {
+      import("https://unpkg.com/@oddbird/css-anchor-positioning");
+    }
+  </script>
+</head>
+
+<body class="bg-gradient-to-br from-[#c84923] via-[#230618] to-[#000011] text-white min-h-screen">
+  <!-- Header -->
+  <header
+    class="sticky top-0 z-50 flex items-center justify-between px-8 py-4 bg-gradient-to-l from-[#7e2115] via-[#ea8225] to-[#f6cb45]">
+    <div class="flex items-center gap-2">
+      <img class="h-12" src="assets/logo.png" alt="Logo">
+      <div class="text-2xl font-bold">GameShop</div>
+    </div>
+    <!-- Buscador -->
+    <div
+      class="relative hidden xl:flex items-center w-full max-w-xs xl:max-w-lg 2xl:max-w-2xl bg-gray-100 rounded-md mx-8 pr-8">
+      <!-- Botón para activar el popover -->
+      <button id="categories-anchor"
+      class="w-24 bg-transparent uppercase text-black font-bold text-sm p-2 focus:outline-none flex items-center justify-center"
+      popovertarget="categories-popover">
+        Categorías
+      </button>
+
+      <!-- Popover para las categorías -->
+      <ul id="categories-popover"
+      class="absolute bg-white border border-gray-300 rounded-md shadow-lg w-48 mt-2 z-50">
+        <li class="px-4 py-2 hover:bg-gray-100"><a href="#" class="block text-gray-800">Game Console</a></li>
+        <li class="px-4 py-2 hover:bg-gray-100"><a href="playstation.html" class="block text-gray-800">PlayStation</a></li>
+        <li class="px-4 py-2 hover:bg-gray-100"><a href="xbox.html" class="block text-gray-800">Xbox</a></li>
+        <li class="px-4 py-2 hover:bg-gray-100"><a href="nintendo.html" class="block text-gray-800">Nintendo Switch</a></li>
+        <li class="px-4 py-2 hover:bg-gray-100"><a href="pcgaming.html" class="block text-gray-800">PC Gaming</a></li>
+        <li class="px-4 py-2 hover:bg-gray-100"><a href="virtualreality.html" class="block text-gray-800">VR (Virtual Reality)</a></li>
+        <!--li class="px-4 py-2 hover:bg-gray-100"><a href="#" class="block text-gray-800">Controllers</a></li>
+        <li class="px-4 py-2 hover:bg-gray-100"><a href="#" class="block text-gray-800">Video Games</a></li>
+        <li class="px-4 py-2 hover:bg-gray-100"><a href="#" class="block text-gray-800">Gaming</a></li>
+        <li class="px-4 py-2 hover:bg-gray-100"><a href="#" class="block text-gray-800">Multiplayer</a></li-->
+      </ul>
+      <input class="border-l border-gray-300 bg-transparent font-semibold text-[#000011] text-sm pl-4 w-full"
+        type="text" placeholder="Buscar ..." tabindex="0" id="site-search">
+      <custom-search>
+        <!-- Botón para abrir el diálogo -->
+        <button class="search-button absolute right-3 top-1.5 p-1" aria-label="Buscar">
+          <img class="search-icon w-4 h-4" src="assets/lupa.png" alt="Buscar" />
+        </button>
+        <!-- Diálogo de resultados -->
+        <dialog id="search-dialog"
+          class="absolute top-14 left-0 bg-white border border-gray-300 rounded-md shadow-lg p-4 w-full max-w-md z-50">
+          <!-- Botón de cierre -->
+          <button
+            class="close-btn bg-[#d03c10] text-white rounded-full w-8 h-8 flex items-center justify-center text-lg absolute top-2 right-2"
+            aria-label="Cerrar búsqueda">
+            ✖
+          </button>
+          <!-- Resultados de búsqueda -->
+          <ul id="search-results" class="space-y-2 max-h-64 overflow-y-auto">
+          </ul>
+          <!-- Template para resultados -->
+          <template>
+            <li class="flex items-center space-x-4 border-b last:border-0 pb2">
+              <img class="item-image w-16 h-16 rounded-md" src="" alt="Imagen del juego" />
+              <div class="card">
+                <a href="#" class="item-title font-bold text-blue-500 hover:underline"></a>
+                <p class="item-platform text-sm text-gray-600"></p>
+                <p class="item-genre text-sm text-gray-600"></p>
+              </div>
+            </li>
+          </template>
+        </dialog>
+      </custom-search>
+    </div>
+
+    <!-- Navegación -->
+    <nav class="flex gap-6">
+      <a href="index.html" class="hover:text-[#f6cb45] transition duration-300">Inicio</a>
+      <a href="error.html" class="hover:text-[#f6cb45] transition duration-300">Novedades</a>
+      <a href="error.html" class="hover:text-[#f6cb45] transition duration-300">Ofertas</a>
+      <a href="error.html" class="hover:text-[#f6cb45] transition duration-300">Contacto</a>
+    </nav>
+    <!-- Login/registro -->
+    <a class="relative flex items-center gap-2 text-white hover:text-[#f6cb45] transition duration-300" href="registro.html">
+      <img src="assets/avatar.png" alt="Login" class="h-12 lg:h-12 p-2">
+      <p class="text-sm font-semibold">Acceso / Registro</p>
+    </a>
+    <!-- Carrito -->
+    <a class="relative" href="#" id="abrirCarrito">
+      <div class="absolute -top-1 right-0 z-10 bg-yellow-400 text-xs font-bold px-1 py-0.5 rounded-sm text-[#000011]" id="contadorCarrito">0</div>
+      <img src="assets/carrito-de-compras.png" alt="Shopping Cart" class="h-12 lg:h-12 p-2">
+    </a>
+    <dialog id="cart-dialog" class="w-96 p-4 bg-white rounded shadow-lg">
+      <button id="close-cart" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl cursor-pointer">
+        ✖
+      </button>
+      <h2 class="text-lg font-bold mb-4">Carrito</h2>
+      <div id="cart-content">
+        <!-- Renderizado de los productos -->
+        <p id="empty-message" class="text-gray-500">Tu carrito está vacío. ¡Agrega productos para comenzar!</p>
+      </div>
+      <div class="border-t mt-4 pt-4">
+        <p id="cart-total" class="text-lg font-bold"></p>
+        <div class="flex justify-between mt-4">
+          <button id="empty-cart" class="bg-red-500 text-white py-2 px-4 rounded">Vaciar</button>
+          <button id="checkout" class="bg-green-500 text-white py-2 px-4 rounded">Comprar</button>
+        </div>
+      </div>
+    </dialog>
+  </header>
+
+  <main>
+    <section class="relative overflow-hidden bg-gray-100 py-12">
+      <!-- Ping de Novedades -->
+      <div class="absolute top-20 right-24 -translate-x-1 z-30">
+        <div class="relative flex items-center justify-center">
+          <!-- Anillo animado -->
+          <span class="animate-ping absolute inline-flex h-24 w-24 rounded-full bg-[#f0a535] opacity-75"></span>
+          <!-- Contenido del círculo -->
+          <span
+            class="relative inline-flex items-center justify-center h-28 w-28 rounded-full bg-[#d03c10] text-white text-lg font-semibold">
+            Novedades
+          </span>
+        </div>
+      </div>
+
+      <!-- Contenedor Principal -->
+      <div class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+        <!-- Columna Izquierda: Textos -->
+        <div class="w-full md:w-1/2 px-4 text-center md:text-left">
+          <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+            Sumérgete en Mundos Épicos
+          </h2>
+          <p class="text-lg text-gray-600 mb-8">
+            Descubre historias cautivadoras, domina retos inolvidables y conviértete en el héroe<br>que el mundo
+            necesita.
+            ¡Explora nuevos títulos y revive clásicos como nunca antes!
+          </p>
+          <!--a href="#" class="bg-[#482636] text-white px-6 py-3 rounded-full hover:bg-[#e46f27]">
+            Juega Ahora
+          </a-->
+        </div>
+
+        <!-- Columna Derecha: Slider -->
+        <div class="w-full md:w-1/2 relative overflow-hidden">
+          <!-- Contenedor de las Diapositivas -->
+          <div class="relative w-full h-80 md:h-96">
+            <!-- Diapositiva 1 -->
+            <input type="radio" name="slider" id="slide-1" class="hidden peer/slide-1" checked>
+            <div class="absolute inset-0 transition-opacity duration-1000 opacity-0 peer-checked/slide-1:opacity-100">
+              <div class="flex items-center justify-center h-full bg-cover bg-center"
+                style="background-image: url('assets/lastofus.png');">
+                <div class="absolute bottom-4 right-4 text-right text-[#000011] px-4 py-2 bg-[#f6cb45] rounded-md">
+                  <span class="text-xl font-bold">Precio: 59 €</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Diapositiva 2 -->
+            <input type="radio" name="slider" id="slide-2" class="hidden peer/slide-2">
+            <div class="absolute inset-0 transition-opacity duration-1000 opacity-0 peer-checked/slide-2:opacity-100">
+              <div class="flex items-center justify-center h-full bg-cover bg-center"
+                style="background-image: url('assets/Baldurs-Gate-3-Now-Available-On-Xbox-Series-XS-scaled.jpeg');">
+                <div class="absolute bottom-4 right-4 text-right text-[#000011] px-4 py-2 bg-[#f6cb45] rounded-md">
+                  <span class="text-xl font-bold">Precio: 62€</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Diapositiva 3 -->
+            <input type="radio" name="slider" id="slide-3" class="hidden peer/slide-3">
+            <div class="absolute inset-0 transition-opacity duration-1000 opacity-0 peer-checked/slide-3:opacity-100">
+              <div class="flex items-center justify-center h-full bg-cover bg-center"
+                style="background-image: url('assets/horizon.jpg');">
+                <div class="absolute bottom-4 right-4 text-right text-[#000011] px-4 py-2 bg-[#f6cb45] rounded-md">
+                  <span class="text-xl font-bold">Precio: 34 €</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controles de Navegación -->
+          <div class="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
+            <label for="slide-1" class="cursor-pointer">
+              <span class="w-3 h-3 block bg-white rounded-full border-2 border-white"></span>
+            </label>
+            <label for="slide-2" class="cursor-pointer">
+              <span class="w-3 h-3 block bg-white rounded-full border-2 border-white"></span>
+            </label>
+            <label for="slide-3" class="cursor-pointer">
+              <span class="w-3 h-3 block bg-white rounded-full border-2 border-white"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Tienda -->
+    <section id="shop">
+      <div class="container mx-auto">
+        <!-- Top Filter -->
+        <div class="flex flex-col md:flex-row justify-between items-center p-4">
+          <div class="flex items-center space-x-4">
+            <button id="toggle-view"
+              class="bg-primary text-white hover:bg-transparent hover:text-primary border hover:border-primary py-2 px-4 rounded-full focus:outline-none">Cambiar
+              vista</button>
+          </div>
+          <div class="flex mt-5 md:mt-0 space-x-4">
+            <div class="relative">
+              <select
+                class="block appearance-none w-full bg-white border  hover:border-primary px-4 py-2 pr-8 rounded-full shadow leading-tight focus:outline-none focus:shadow-outline text-[#000011]">
+                <option>Ordenar por fecha</option>
+                <option>Ordenar por opiniones</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center justify-center pl-2">
+                <img id="arrow-down" class="h-5 w-5" src="assets/filter.png" alt="filter arrow">
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Filter Toggle Button -->
+        <div class="block md:hidden text-center mb-4">
+          <button id="products-toggle-filters"
+            class="bg-primary text-white py-2 px-4 rounded-full focus:outline-none">Filtros</button>
+        </div>
+        <div class="flex flex-col md:flex-row">
+          <!-- Filters -->
+          <div id="filters" class="w-full md:w-1/4 p-4 hidden md:block">
+            <!-- Plataforma Filter -->
+            <!-- Plataforma Filter -->
+            <div class="mb-6 pb-8 border-b border-gray-line">
+              <h3 class="text-lg font-semibold mb-6">Plataforma</h3>
+              <div class="space-y-2">
+                <label class="flex items-center">
+                  <input id="platform-pc" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">PC Gaming</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="platform-playstation" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">PlayStation</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="platform-xbox" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Xbox</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="platform-nintendo" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Nintendo Switch</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="platform-vr" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">VR (Virtual Reality)</span>
+                </label>
+              </div>
+            </div>
+            <!-- Género Filter -->
+            <div class="mb-6 pb-8 border-b border-gray-line">
+              <h3 class="text-lg font-semibold mb-6">Género</h3>
+              <div class="space-y-2">
+                <label class="flex items-center">
+                  <input id="genre-action" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Action</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-action-adventure" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Action-Adventure</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-adventure" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Adventure</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-shooter" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Shooter</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-fps" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">First-Person Shooter</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-sandbox" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Sandbox</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-creative" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Creative</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-rpg" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">RPG</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-action-rpg" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Action RPG</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-sports" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Sports</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-racing" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Racing</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-platformer" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Platformer</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-simulation" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Simulation</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-survival-horror" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Survival Horror</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-horror" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Horror</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-open-world" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Open World</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-battle-royale" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Battle Royale</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-social-deduction" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Social Deduction</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-family-friendly" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Family-Friendly</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-story-driven" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Story-Driven</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="genre-party-game" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Party Game</span>
+                </label>
+              </div>
+            </div>
+            <!-- Rango de Precios -->
+            <div class="mb-6 pb-8 border-b border-gray-line">
+              <h3 class="text-lg font-semibold mb-6">Rango de precios</h3>
+              <div class="space-y-2">
+                <label class="flex items-center">
+                  <input id="price-0-20" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">0-20 €</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="price-20-40" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">20-40 €</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="price-40-60" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">40-60 €</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="price-60-plus" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">+ 60 €</span>
+                </label>
+              </div>
+            </div>
+            <!-- Edad -->
+            <div class="mb-6 pb-8 border-b border-gray-line">
+              <h3 class="text-lg font-semibold mb-6">Edad</h3>
+              <div class="space-y-2">
+                <label class="flex items-center">
+                  <input id="age-3-plus" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">3+</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="age-7-plus" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">7+</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="age-12-plus" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">12+</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="age-16-plus" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">16+</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="age-18-plus" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">18+</span>
+                </label>
+              </div>
+            </div>
+            <!-- Tipo de Jugador -->
+            <div class="mb-6 pb-8 border-b border-gray-line">
+              <h3 class="text-lg font-semibold mb-6">Multijugador</h3>
+              <div class="space-y-2">
+                <label class="flex items-center">
+                  <input id="player-multiplayer" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Multiplayer</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="player-single-player" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">Single Player</span>
+                </label>
+              </div>
+            </div>
+            <!-- Opiniones -->
+            <div class="mb-6">
+              <h3 class="text-lg font-semibold mb-6">Opiniones</h3>
+              <div class="space-y-2">
+                <label class="flex items-center">
+                  <input id="rating-5-stars" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">★★★★★</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="rating-4-stars" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">★★★★☆</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="rating-3-stars" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">★★★☆☆</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="rating-2-stars" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">★★☆☆☆</span>
+                </label>
+                <label class="flex items-center">
+                  <input id="rating-1-star" type="checkbox" class="form-checkbox custom-checkbox">
+                  <span class="ml-2">★☆☆☆☆</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <!-- Products List -->
+          <div class="w-full md:w-3/4 p-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="listaProductos">
+              <!-- Productos renderizados dinámicamente -->
+              <custom-render section ="ps5"></custom-render>
+            </div>
+            <template id="product-template">
+              <div class="bg-white p-4 rounded-lg shadow">
+                <img id="product-image" src="" alt="" class="w-full h-64 object-cover mb-4 rounded-lg">
+                <a id="product-title" href="#" class="text-lg text-[#000011] font-semibold mb-2"></a>
+                <p id="product-description" class="text-sm text-gray-700 mb-2"></p>
+                <p class="text-sm text-gray-700 mb-2">Lanzamiento: <span  id="product-fecha" ></span></p>
+                <p class="mb-2 text-gray-700">Plataforma: <strong id="product-platforms" ></strong></p>
+                <div class="flex items-center mb-4">
+                  <span id="product-price" class="text-lg font-bold text-gray-900"></span>
+                </div>
+                <div class="flex items-center pb-2">
+                  <span id="product-rating" class="text-sm text-yellow-500 font-semibold"></span>
+                  <button id="info-anchor" popovertarget="info-popover" anchor-name="--info-anchor"
+                    class="ml-auto bg-[#16152f] border border-transparent hover:bg-[#482636] hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-1/3">
+                    + Info.
+                  </button>
+                  <div id="info-popover" class="info-popover hidden bg-white p-4 rounded-lg shadow" popover style="width: 400px;">
+                    <div class="bg-white p-4 rounded-lg shadow">
+                      <img class="popover-product-image w-full h-64 object-cover mb-4 rounded-lg" src="" alt="">
+                      <div class="mb-4 pb-4 border-b border-gray-line">
+                        <p class="mb-2">Código de producto: <strong class="popover-id"></strong></p>
+                        <p class="mb-2">Características: <strong class="popover-tags"></strong></p>
+                        <p class="mb-2">Disponibilidad: <strong class="popover-stock">En Stock</strong></p>
+                        <p class="mb-2">Fecha de lanzamiento: <strong class="popover-fecha"></strong></p>
+                        <p class="mb-2">Edad recomendada: <strong class="popover-edad"></strong></p>
+                        <p class="mb-2">Plataforma: <strong id="product-platforms" ></strong></p>
+                      </div>
+                      <h3 class="text-lg font-semibold mb-2">Descripción del producto</h3>
+                      <p class="popover-description"></p>
+                      </div>
+                    </div>
+                  </div>
+                  <button id="addCarrito"
+                  class="bg-[#ea8225] border border-transparent hover:bg-[#be5024] hover:border-primary text-white hover:text-primary font-semibold py-2 px-4 rounded-full w-full">
+                  Añadir al carrito
+                </button>
+                </div>
+               </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="bg-white text-[#333] py-6 border-t border-gray-200">
+    <div class="container mx-auto px-4 lg:px-12">
+      <!-- Contenedor Flex -->
+      <div class="flex flex-col lg:flex-row justify-between items-center">
+        <!-- Logo y descripción -->
+        <div class="text-center lg:text-left mb-4 lg:mb-0 flex items-center justify-between lg:justify-start gap-4">
+          <img class="h-12" src="assets/logo.png" alt="Logo">
+          <div>
+            <h2 class="text-xl font-bold">GameShop</h2>
+            <p class="text-sm text-gray-600">Tu tienda de videojuegos favorita.</p>
+          </div>
+        </div>
+        <!-- Redes sociales -->
+        <div class="flex justify-center lg:justify-end gap-4">
+          <a href="#" class="hover:text-[#ea8225]">
+            <img src="assets/icons8-twitter-96.png" alt="Twitter" class="w-6 h-6">
+          </a>
+          <a href="#" class="hover:text-[#ea8225]">
+            <img src="assets/icons8-facebook-96.png" alt="Facebook" class="w-6 h-6">
+          </a>
+          <a href="#" class="hover:text-[#ea8225]">
+            <img src="assets/icons8-instagram-96.png" alt="Instagram" class="w-6 h-6">
+          </a>
+          <a href="#" class="hover:text-[#ea8225]">
+            <img src="assets/icons8-youtube-96.png" alt="YouTube" class="w-6 h-6">
+          </a>
+        </div>
+      </div>
+      <!-- Derechos reservados -->
+      <div class="text-center mt-4 text-sm text-gray-500">
+        <p>© 2024 GameShop. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+  <script src="scripts.js" defer></script>
+</body>
+
+</html>

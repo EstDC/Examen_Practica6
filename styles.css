@@ -1,0 +1,155 @@
+/* Botón "Categorías" */
+#categories-anchor {
+  cursor: pointer;
+  padding: 0.5rem;
+  text-align: left;
+  width: auto; 
+  background: transparent;
+  text-transform: uppercase;
+  color: black;
+  font-weight: bold;
+  font-size: 0.875rem; /* 14px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+}
+
+/* Popover de categorías */
+#categories-popover {
+  position: absolute;
+  top: calc(100% + 10px); /* 10px de separación del botón, así no se me mueve */
+  left: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 0.375rem; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 12rem; /* Ancho fijo */
+  padding: 0;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: visibility 0s, opacity 0.2s ease, transform 0.2s ease;
+  z-index: 1001;
+}
+
+/* Mostrar el popover cuando el botón tiene el foco o el hover */
+#categories-anchor:focus ~ #categories-popover,
+#categories-anchor:hover ~ #categories-popover,
+#categories-popover:hover {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Estilos para los elementos dentro del popover */
+#categories-popover li {
+  padding: 0.5rem 1rem; 
+  cursor: pointer;
+}
+
+#categories-popover li:hover {
+  background-color: #f7f7f78e;
+}
+
+#categories-popover a {
+  color: #333;
+  text-decoration: none;
+  display: block;
+  width: 100%; 
+}
+
+#categories-popover a:hover {
+  text-decoration: none;
+}
+
+
+/*Dialog*/
+dialog {
+  position: absolute;
+  text-align: left;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+#search-results {
+  list-style: none;
+  padding: 0;
+}
+
+#search-results li:hover {
+  background-color: #f3f4f6; /* Hover para cada resultado */
+  cursor: pointer;
+}
+
+.card img {
+  object-fit: cover;
+}
+
+/*Ping novedades*/
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.animation-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Popover info template*/
+#info-anchor{
+  anchor-name: --info-anchor;
+  position: relative;
+}
+
+.info-popover [popover] {
+  position-anchor: --info-anchor;
+  display: none;
+  position: absolute;
+  bottom: anchor(top);
+  right: anchor(left);
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 40;
+}
+
+.info-popover.visible {
+  display: block;
+}
+
+#info-popover:popover-open{
+  display: block;
+}
+/*#info-popover[popover] {
+  position: absolute;
+  position-anchor: --info-anchor;
+  position-area: top left;
+  inset: auto;
+ /* margin: 0;
+  bottom:anchor(top);
+  right: anchor(left);*/
+ /* background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  display: none;
+  z-index: 40;
+}
+#info-popover:popover-open{
+  display: block;
+}
+
+/* Mostrar el popover al interactuar con el botón */
+/*#info-anchor:focus ~ #info-popover {
+  display: block;
+}
+
+#info-anchor:hover ~ #info-popover{
+  display: block;
+}
