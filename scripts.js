@@ -1,3 +1,4 @@
+//============================================================================================================================================
 //Custom search del dialog
 class CustomSearch extends HTMLElement {
   constructor() {
@@ -99,6 +100,8 @@ class CustomSearch extends HTMLElement {
 
 customElements.define('custom-search', CustomSearch);
 
+//============================================================================================================================================
+
 //Para almacenar los datos del carrito entre páginas, es mejor que usar el localstorage o las cookies, IndexedDB es una base de datos NoSQL integrada en los navegadores web modernos.
 // IndexedDB: Inicialización
 function openDatabase() {//Abrir una conexión a la base de datos
@@ -168,7 +171,7 @@ async function clearIndexedDB() {
     request.onerror = () => reject(request.error);
   });
 }
-
+//===============================================================================================================================================================
 //Carrito
 class ShoppingCart {
   constructor() {
@@ -312,6 +315,8 @@ class ShoppingCart {
 }
 //He tenido que mover esta clase para inicializarla antes que el resto ya que luego si no estaba cargada antes que Productrender me daba problemas con el carrito
 const shoppingCart = new ShoppingCart();
+
+//===================================================================================================================================================================================
 
 //Render de los productos en index en un grid
 class CustomRender extends HTMLElement {
@@ -504,6 +509,8 @@ class CustomRender extends HTMLElement {
 }
 customElements.define('custom-render', CustomRender);
 
+//=========================================================================================================================================================================================
+
 //Render de producto detalle
 class ProductViewer extends HTMLElement {
   constructor() {
@@ -594,6 +601,8 @@ class ProductViewer extends HTMLElement {
 }
 customElements.define('custom-product', ProductViewer);
 
+//============================================================================================================================================
+
 // Cambio de vista en el index del grid
 document.getElementById('toggle-view').addEventListener('click', () => {
   const productList = document.getElementById('listaProductos'); // Selecciona el contenedor
@@ -607,10 +616,79 @@ document.getElementById('toggle-view').addEventListener('click', () => {
   }
 });
 
+//============================================================================================================================================
+//Ordenar productos por fecha, rating y default
+//Manejo de eventos
+document.addEventListener('DOMContentLoaded', function () {
+  var customRenderElement = document.querySelector('custom-render');
+  var gamesData = []; // Aquí guardaremos los datos originales de los juegos
+
+  // Interceptar la llamada a fetchGames para guardar los datos originales
+  var originalFetchGames = customRenderElement.fetchGames.bind(customRenderElement);
+  customRenderElement.fetchGames = async function () {
+    await originalFetchGames();
+    // Obtener los juegos y guardarlos en gamesData
+    var response = await fetch('https://products-foniuhqsba-uc.a.run.app/Games');
+    if (response.ok) {
+      gamesData = await response.json();
+      console.log('Datos de juegos cargados:', gamesData); // Confirmar que game.date y game.rating están disponibles
+    } else {
+      console.error('Error al cargar los juegos desde la API.');
+    }
+  };
+
+  // Escuchar el cambio en el select
+  var sortOptions = document.getElementById('sort-options');
+  sortOptions.addEventListener('change', function (event) {
+    var criterion = event.target.value; // Valor seleccionado: 'default', 'date', o 'rating'
+    var sortedGames;
+
+    if (criterion === 'default') {
+      // Si es "Por Defecto", usar la lista original sin ordenar
+      sortedGames = copyArray(gamesData); // Copiar los datos para no modificar el original
+    } else {
+      // Ordenar los juegos según el criterio
+      sortedGames = sortGames(gamesData, criterion);
+    }
+
+    // Renderizar los juegos ordenados
+    customRenderElement.render(sortedGames);
+  });
+});
+
+// Función para ordenar los juegos
+function sortGames(games, criterion) {
+  var sortedGames = copyArray(games); // Crear una copia del array
+
+  if (criterion === 'date') {
+    // Ordenar por fecha descendente
+    sortedGames.sort(function (a, b) {
+      return new Date(b.date) - new Date(a.date); // Asegúrate de que date sea válida
+    });
+  } else if (criterion === 'rating') {
+    // Ordenar por rating descendente
+    sortedGames.sort(function (a, b) {
+      return b.rating - a.rating; // Comparar ratings numéricos
+    });
+  }
+
+  return sortedGames;
+}
+
+// Función para copiar un array
+function copyArray(array) {
+  var copy = [];
+  for (var i = 0; i < array.length; i++) {
+    copy.push(array[i]);
+  }
+  return copy;
+}
+//============================================================================================================================================
+
 //Filtrado de productos
 //PENDIENTE DE HACER TODOS
 
-//Filtro por checkbox lateral, al no ser elementos <a> de link hay que usar los eventos de cambio
+//Filtro por checkbox lateral, al no ser elementos <a> de link hay que usar los eventos de cambio, en el CustomRender se filtra por section
 document.getElementById('platform-pc').addEventListener('change', (event) => {
   if (event.target.checked) {
     window.location.href = 'pcgaming.html';

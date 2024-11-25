@@ -128,18 +128,18 @@
                     <!-- Login -->
                     <div class="lg:w-1/3 bg-white rounded-lg shadow-lg p-6 flex flex-col">
                         <h2 class="text-xl font-semibold mb-6 text-center text-[#000011]">Login</h2>
-                        <form class="space-y-4 flex-grow">
+                        <form class="space-y-4 flex-grow" id="login-form">
                             <div>
                                 <label for="login-email" class="block text-sm font-medium text-gray-700">E-mail</label>
                                 <input type="email" id="login-email"
-                                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ea8225] focus:outline-none"
+                                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ea8225] focus:outline-none text-[#000011]"
                                     required>
                             </div>
                             <div>
                                 <label for="login-password"
                                     class="block text-sm font-medium text-gray-700">Contraseña</label>
                                 <input type="password" id="login-password"
-                                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ea8225] focus:outline-none"
+                                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ea8225] focus:outline-none text-[#000011]"
                                     required>
                             </div>
                             <div class="flex items-center justify-between">
@@ -158,26 +158,26 @@
                     <!-- Registro -->
                     <div class="lg:w-1/3 bg-white rounded-lg shadow-lg p-6 flex flex-col">
                         <h2 class="text-xl font-semibold mb-6 text-center text-[#000011]">Registro</h2>
-                        <form class="space-y-4 flex-grow">
+                        <form class="space-y-4 flex-grow" id="register-form">
                             <div>
                                 <label for="register-email"
                                     class="block text-sm font-medium text-gray-700">E-mail</label>
                                 <input type="email" id="register-email"
-                                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ea8225] focus:outline-none"
+                                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ea8225] focus:outline-none text-[#000011]"
                                     required>
                             </div>
                             <div>
                                 <label for="register-password"
                                     class="block text-sm font-medium text-gray-700">Contraseña</label>
                                 <input type="password" id="register-password"
-                                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ea8225] focus:outline-none"
+                                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ea8225] focus:outline-none text-[#000011]"
                                     required>
                             </div>
                             <div>
                                 <label for="register-confirm-password"
                                     class="block text-sm font-medium text-gray-700">Confirmar contraseña</label>
                                 <input type="password" id="register-confirm-password"
-                                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ea8225] focus:outline-none"
+                                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#ea8225] focus:outline-none text-[#000011]"
                                     required>
                             </div>
                             <button type="submit"
@@ -222,6 +222,32 @@
         </div>
     </footer>
     <script src="scripts.js" defer></script>
+    <script>
+        // Seleccionar los formularios
+        const loginForm = document.getElementById("login-form");
+        const registerForm = document.getElementById("register-form");
+        // Función para limpiar campos
+        function clearFormFields(form) {
+            const inputs = form.querySelectorAll("input");
+            inputs.forEach(input => {
+                input.value = ""; // Limpia el valor de cada input
+            });
+        }
+
+        // Evento de submit para el formulario de login
+        loginForm.addEventListener("submit", (event) => {
+            event.preventDefault(); // Evitar el envío del formulario
+            alert("Bienvenido, ha iniciado sesión correctamente.");
+            clearFormFields(loginForm); 
+        });
+
+        // Evento de submit para el formulario de registro
+        registerForm.addEventListener("submit", (event) => {
+            event.preventDefault(); 
+            alert("Ha sido registrado exitosamente. ¡Visite su nueva cuenta!");
+            clearFormFields(registerForm); 
+        });
+    </script>
 </body>
 
 </html>
